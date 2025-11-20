@@ -6,21 +6,36 @@
     <title>System Invitation</title>
     <style>
         body {
-            background-color: #0d0d0d;
-            color: #00ff41;
-            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden; /* Oculta barras de desplazamiento si el canvas se excede */
+            background-color: #0d0d0d; /* Fondo oscuro por si el canvas no carga */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            color: #00ff41; /* Color del texto del terminal, por si se muestra encima del canvas */
+            font-family: 'Courier New', Courier, monospace;
+            position: relative; /* Para posicionar el terminal encima del canvas */
         }
+        
+        /* Estilos del canvas para el efecto Matrix */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Asegura que esté en el fondo */
+        }
+
+        /* Estilos del terminal, ahora con z-index mayor para que esté encima */
         .terminal {
+            position: relative; /* Necesario para z-index */
+            z-index: 1; /* Asegura que esté encima del canvas */
             border: 2px solid #00ff41;
             padding: 20px;
             width: 90%;
             max-width: 500px;
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            background-color: rgba(13, 13, 13, 0.8); /* Un poco transparente para ver la lluvia */
         }
         .cursor {
             animation: blink 1s infinite;
@@ -46,25 +61,79 @@
 </head>
 <body>
 
+    <canvas id="matrixCanvas"></canvas>
+
     <div class="terminal">
-        <p>> Inicializando protocolo de fiesta... <span class="cursor">_</span></p>
+        <p>> Inicializando protocolo de fiesta...</p>
         <p>> Status: <span style="color:yellow">CONFIRMADO</span></p>
         <br>
         <p>> Evento: CUMPLEAÑOS_v2025.exe</p>
         <p>> Fecha: 21 de Noviembre 2025</p>
-        <p>> Hora: apartir de la 1 pm</p>
+        <p>> Hora: A partir de la 1:00 PM</p>
         <br>
-        <p>> Destino detectado...</p>
-        <br>
-        <p>Esperando a que el usuario de click...</p>
+        <p>> Destino detectado... </p>
+        <p>> Esperando a que el usuario de click... <span class="cursor">_</span></p>
         
         <button id="btnLaunch">EJECUTAR_MAPS()</button>
+        
+        <p>PD: Invita a quien quieras, la invitacion es libre.</p>
     </div>
 
     <script>
         document.getElementById('btnLaunch').addEventListener('click', function() {
-            // Abre la dirección solicitada
-            window.open("https://maps.app.goo.gl/EQtL1dk962YBBmRv8", "_blank");
+            window.open("https://maps.app.goo.gl/hD3552Zp393t397R8", "_blank");
+        });
+
+        // --- Código para el efecto Matrix ---
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]:;<>,.?/|`~';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        // Inicializa la posición de cada gota
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function draw() {
+            // Fondo ligeramente transparente para el rastro
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff41'; // Color verde Matrix
+            ctx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Envía la gota de vuelta arriba si está fuera de la pantalla
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                // Incrementa la posición de la gota
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33); // Dibuja cada 33ms (aprox 30 FPS)
+
+        // Ajusta el canvas si se cambia el tamaño de la ventana
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = canvas.width / fontSize;
+            drops.length = 0; // Reinicia las gotas
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
         });
     </script>
 
