@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Invitation</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .terminal {
+            border: 2px solid #00ff41;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        button {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background: #00ff41;
+            color: #0d0d0d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <p>> Inicializando protocolo de fiesta... <span class="cursor">_</span></p>
+        <p>> Status: <span style="color:yellow">CONFIRMADO</span></p>
+        <br>
+        <p>> Evento: CUMPLEAÑOS_v2025.exe</p>
+        <p>> Fecha: 21 de Noviembre 2025</p>
+        <p>> Hora: apartir de la 1 pm</p>
+        <br>
+        <p>> Destino detectado. Esperando input del usuario...</p>
+        
+        <button id="btnLaunch">EJECUTAR_MAPS()</button>
+    </div>
+
+    <script>
+        document.getElementById('btnLaunch').addEventListener('click', function() {
+            // Abre la dirección solicitada
+            window.open("https://maps.app.goo.gl/EQtL1dk962YBBmRv8", "_blank");
+        });
+    </script>
+
+</body>
+</html>
